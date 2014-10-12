@@ -16,16 +16,19 @@ func getEnv(key string, defVal string) (env string) {
 	return
 }
 
+func handler(w http.ResponseWriter, r *http.Request) { 
+    fmt.Fprintf(w, "Hello world!")
+}
+
 
 func main() {
 	host := getEnv("HOST", "")
 	port := getEnv("PORT", "8080")
-	wsPort := getEnv("WSPORT", "8080")
-//	mongoURL := getEnv("MONGOHQ_URL", "localhost")
 
 	bind := fmt.Sprintf("%s:%s", host, port)
-	log.Println("Starting server on", bind, "with websocket on port", wsPort)
+	log.Println("Starting server on", bind)
 
+	http.HandleFunc("/", handler)
 	err := http.ListenAndServe(bind, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
